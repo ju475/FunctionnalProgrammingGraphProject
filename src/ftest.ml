@@ -33,3 +33,19 @@ let () =
 
   ()
 
+   let infile = Sys.argv.(1)
+  and outfile = Sys.argv.(4)
+  
+  (* These command-line arguments are not used for the moment. *)
+  and _source = int_of_string Sys.argv.(2)
+  and _sink = int_of_string Sys.argv.(3)
+  in
+  
+  (* Open file *)
+  let g = from_file infile in
+
+  (* Rewrite the graph that has been read. *)
+  let () = export outfile g in
+
+  ()
+
