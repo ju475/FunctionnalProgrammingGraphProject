@@ -26,6 +26,8 @@ demo: build
 clean:
 	find -L . -name "*~" -delete
 	rm -f *.exe
+	rm new.svg
+	rm graphs/new.dot
 	dune clean
 
 demoDot: build
