@@ -5,3 +5,6 @@ outfile
 
 token.txt
 .Rhistory
+new.svg
+graphs/graph.dot
+graphs/new.dot

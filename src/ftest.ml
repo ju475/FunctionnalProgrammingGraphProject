@@ -1,4 +1,5 @@
 open Gfile
+open Tools
     
 let () =
 
@@ -27,25 +28,17 @@ let () =
 
   (* Open file *)
   let graph = from_file infile in
+  let graph = (gmap graph int_of_string) in 
+  let graph = (add_arc graph 2 3 5) in 
+  let graph = (add_arc graph 0 4 5) in 
+  let graph = (gmap graph string_of_int) in 
 
+  (* let graph2 = (gmap graph (fun x->  
+    string_of_int(int_of_string(x)+2))) in *)
   (* Rewrite the graph that has been read. *)
-  let () = write_file outfile graph in
+  let () = export outfile graph in
 
   ()
 
-   let infile = Sys.argv.(1)
-  and outfile = Sys.argv.(4)
-  
-  (* These command-line arguments are not used for the moment. *)
-  and _source = int_of_string Sys.argv.(2)
-  and _sink = int_of_string Sys.argv.(3)
-  in
-  
-  (* Open file *)
-  let g = from_file infile in
 
-  (* Rewrite the graph that has been read. *)
-  let () = export outfile g in
-
-  ()
 

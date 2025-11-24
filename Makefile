@@ -2,7 +2,7 @@
 
 src?=0
 dst?=5
-graph?=graph1.txt
+graph?=graph.txt
 
 all: build
 
@@ -27,3 +27,10 @@ clean:
 	find -L . -name "*~" -delete
 	rm -f *.exe
 	dune clean
+
+demoDot: build
+	@echo "\n   ⚡  EXECUTING  ⚡\n"
+	./ftest.exe graphs/${graph} $(src) $(dst) graphs/new.dot
+	dot -Tsvg graphs/new.dot > new.svg
+	@echo "\n   🥁  RESULT (content of new.dot)  🥁\n"
+	@cat new.dot
