@@ -34,5 +34,4 @@ demoDot: build
 	@echo "\n   ⚡  EXECUTING  ⚡\n"
 	./ftest.exe graphs/${graph} $(src) $(dst) graphs/new.dot
 	dot -Tsvg graphs/new.dot > new.svg
-	@echo "\n   🥁  RESULT (content of new.dot)  🥁\n"
-	@cat new.dot
+	
