@@ -14,8 +14,9 @@ val flot2ecart: flot_graph -> ecart_graph
 (*
 val ford_fulkerson: cap_graph -> id -> id -> flot_graph
 
-val journey: ecart_graph -> id -> id -> (int arc) list
 *)
+val journey: ecart_graph -> id -> id -> (int arc) list
+
 
 val flotmin: (int arc) list -> int 
  
