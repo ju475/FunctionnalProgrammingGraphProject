@@ -23,11 +23,27 @@ in
 let ecart2flot (cg:cap_graph)(eg : ecart_graph)=
 
 
-
-
-let rec journey (eg:ecart_graph) (srcNode:id) (tgtNode:id) =
-    (* we need to add a accu for the visited nodes and do a dfs*)
 *)
+
+let find_mapi f i l =
+    f (List.nth l i)
+
+let rec dfs (eg:ecart_graph) (srcNode:id) (tgtNode:id) (visiting:int) (acc:(int arc) list) =
+
+    let l_arc = out_arcs eg srcNode in 
+    if (l_arc == []) then (if srcNode == tgtNode then acc else []) (* Si on est à la fin du chemin, soit arrivé, soit backtrack *)
+    else
+        let currentChemin = (find_mapi (fun arc ->(dfs (eg) (arc.tgt) (tgtNode) (visiting) (arc::acc))) visiting l_arc) in (* Si on peut aller plus loin *)
+            match currentChemin with
+            | [] -> if (visiting>List.length l_arc) then [] else dfs eg srcNode tgtNode (visiting+1) acc (* Si pas de chemin possible et pas d'autre arc dispo, backtrack, sinon on tente sur l'arc d'apres*)
+            | _ ->   (List.nth l_arc visiting)::acc
+
+
+ 
+let journey (eg:ecart_graph) (srcNode:id) (tgtNode:id) =
+    (* we need to add a accu for the visited nodes and do a dfs*)
+    dfs eg srcNode tgtNode 0 []
+
 
 let flotmin (jrn:(int arc) list) =
     List.fold_left (fun acc new_val -> if (new_val.lbl < acc) then new_val.lbl else acc) (int_of_float infinity) jrn 

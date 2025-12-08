@@ -20,5 +20,8 @@ let add_arc g id1 id2 n =
   |None -> new_arc g {src=id1;tgt=id2;lbl=n}
   |Some ar -> new_arc g {src=ar.src; tgt=ar.tgt; lbl=(ar.lbl+n) }
 
-  let string_of_tuple f (a,b)  =
+let string_of_tuple f (a,b)  =
     "("^ (f a) ^"/"^ (f b)^ ")"
+
+let chemin2graph c = 
+  List.map (fun arc -> (arc.src,[arc])) c
