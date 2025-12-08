@@ -6,10 +6,13 @@ type flot_graph = (int * int) graph
 
 type ecart_graph = int graph
 
+(* Creer le graphe de flot de type flot_graph à partir du graphe de capacite du type cap_graph*)
 val cap2flot: cap_graph -> flot_graph 
 
  
 val flot2ecart: flot_graph -> ecart_graph
+
+val ecart2flot: cap_graph->ecart_graph -> flot_graph
 
 val flotmin: (int arc) list -> int 
 

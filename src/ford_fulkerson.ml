@@ -19,13 +19,18 @@ in
     e_fold fg add_both (clone_nodes fg) 
  
 
-let flotmin (jrn:(int arc) list) =
-    List.fold_left (fun acc new_val -> if (new_val.lbl < acc) then new_val.lbl else acc) (int_of_float infinity) jrn 
-
 (*
+let ecart2flot (cg:cap_graph)(eg : ecart_graph)=
+
+
+
+
 let rec journey (eg:ecart_graph) (srcNode:id) (tgtNode:id) =
     (* we need to add a accu for the visited nodes and do a dfs*)
 *)
+
+let flotmin (jrn:(int arc) list) =
+    List.fold_left (fun acc new_val -> if (new_val.lbl < acc) then new_val.lbl else acc) (int_of_float infinity) jrn 
 
 let ford_fulkerson (cg:cap_graph) (srcNode:id) (tgtNode:id)  =
 if not (node_exists cg srcNode) then raise (Graph_error "Source Node Not Exists")
