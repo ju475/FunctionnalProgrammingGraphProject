@@ -24,4 +24,5 @@ let string_of_tuple f (a,b)  =
     "("^ (f a) ^"/"^ (f b)^ ")"
 
 let chemin2graph c = 
-  List.map (fun arc -> (arc.src,[arc])) c
+  let graph = List.fold_left (fun acc arc -> new_node acc arc.src) empty_graph c in
+  List.fold_left (fun acc arc -> add_arc acc arc.src arc.tgt arc.lbl) graph c 

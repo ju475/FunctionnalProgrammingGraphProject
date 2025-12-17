@@ -1,5 +1,6 @@
 open Gfile
 open Tools
+open Graph
 open Ford_fulkerson
     
 let () =
@@ -20,7 +21,7 @@ let () =
   (* Arguments are : infile(1) source-id(2) sink-id(3) outfile(4) *)
   
   let infile = Sys.argv.(1)
-  and outfile = Sys.argv.(4)
+  and _outfile = Sys.argv.(4)
   
   (* These command-line arguments are not used for the moment. *)
   and _source = int_of_string Sys.argv.(2)
@@ -32,13 +33,19 @@ let () =
   let graph = (gmap graph int_of_string) in 
   let graph = (cap2flot graph) in
   let graph = (flot2ecart graph) in
-  let graph = (chemin2graph graph) in
-  let graph = (gmap graph string_of_int) in 
+  let () = print_endline "AA" in
+  let chemin = (journey graph 0 5) in
+  let () = print_endline "B" in 
+  let schemin = String.concat ";" (List.map (fun arc -> string_of_int arc.tgt) chemin) in
+  print_endline schemin ;
+  (*let graph = (chemin2graph chemin) in 
+  let () = print_endline "C" in
+  let graph = (gmap graph string_of_int) in *)
 
   (* let graph2 = (gmap graph (fun x->  
     string_of_int(int_of_string(x)+2))) in *)
   (* Rewrite the graph that has been read. *)
-  let () = export outfile graph in
+  (*let () = export outfile graph in *)
 
   ()
 

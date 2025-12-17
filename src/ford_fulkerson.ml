@@ -25,18 +25,29 @@ let ecart2flot (cg:cap_graph)(eg : ecart_graph)=
 
 *)
 
-let find_mapi f i l =
+let mapi f i l =
     f (List.nth l i)
 
 let rec dfs (eg:ecart_graph) (srcNode:id) (tgtNode:id) (visiting:int) (acc:(int arc) list) =
-
-    let l_arc = out_arcs eg srcNode in 
-    if (l_arc == []) then (if srcNode == tgtNode then acc else []) (* Si on est à la fin du chemin, soit arrivé, soit backtrack *)
+    if srcNode == tgtNode then acc (*Si on est arrivé, on renvoie le chemin courant*)
     else
-        let currentChemin = (find_mapi (fun arc ->(dfs (eg) (arc.tgt) (tgtNode) (visiting) (arc::acc))) visiting l_arc) in (* Si on peut aller plus loin *)
-            match currentChemin with
-            | [] -> if (visiting>List.length l_arc) then [] else dfs eg srcNode tgtNode (visiting+1) acc (* Si pas de chemin possible et pas d'autre arc dispo, backtrack, sinon on tente sur l'arc d'apres*)
-            | _ ->   (List.nth l_arc visiting)::acc
+        let l_arc = out_arcs eg srcNode in (*On recup les arcs sortants*)
+        if (visiting>(List.length l_arc)-1) then [] (*Si on s'apprete a visité un arc qui n'existe pas*)
+        else 
+            let arc2visit = (List.nth l_arc visiting) in
+            if List.fold_left (fun ans arc -> match arc with 
+                | {src=s;tgt=_;lbl=_} -> ans || s==arc2visit.src || arc2visit.lbl==0) false acc then (dfs eg srcNode tgtNode (visiting+1) acc)
+            (*Si on observe un arc qui amème à un noeud deja visité OU le label = 0 *)            
+            else
+                
+                if (l_arc == []) then [] (* Si on est à la fin du chemin, soit arrivé, soit backtrack *)
+                else
+                    let () = print_endline "D" in
+                    let currentChemin = (mapi (fun arc ->(dfs (eg) (arc.tgt) (tgtNode) 0 (arc::acc))) visiting l_arc) in (* Si on peut aller plus loin *)
+                    let () = print_endline "E" in    
+                    match currentChemin with
+                        | [] -> dfs eg srcNode tgtNode (visiting+1) acc (* Si pas de chemin possible et pas d'autre arc dispo, backtrack, sinon on tente sur l'arc d'apres*)
+                        | _ ->  currentChemin
 
 
  

@@ -12,8 +12,8 @@ val cap2flot: cap_graph -> flot_graph
  
 val flot2ecart: flot_graph -> ecart_graph
 
-val ecart2flot: cap_graph->ecart_graph -> flot_graph
-
+(*val ecart2flot: cap_graph->ecart_graph -> flot_graph
+*)
 val flotmin: (int arc) list -> int 
 
 val journey: ecart_graph -> id -> id -> (int arc) list

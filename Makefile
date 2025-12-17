@@ -1,8 +1,8 @@
 .PHONY: all build format edit demo clean
 
 src?=0
-dst?=5
-graph?=graph.txt
+dst?=8
+graph?=graph1.txt
 
 all: build
 
