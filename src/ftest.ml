@@ -28,6 +28,7 @@ let () =
   and _sink = int_of_string Sys.argv.(3)
   in
 
+  (*
   (* Open file *)
   let graph = from_file infile in
   let graph = (gmap graph int_of_string) in 
@@ -41,6 +42,16 @@ let () =
   (*let graph = (chemin2graph chemin) in 
   let () = print_endline "C" in
   let graph = (gmap graph string_of_int) in *)
+  (*let graph = (chemin2graph graph) in*)
+  let graph = (gmap graph string_of_int) in *)
+
+  (* Open file *)
+  let graph = from_file infile in
+  let cgraph = (gmap graph int_of_string) in 
+  let graph = (cap2flot cgraph) in
+  let graph = (flot2ecart graph) in 
+  let graph = (ecart2flot cgraph graph) in 
+  let graph = (gmap graph (string_of_tuple string_of_int)) in 
 
   (* let graph2 = (gmap graph (fun x->  
     string_of_int(int_of_string(x)+2))) in *)

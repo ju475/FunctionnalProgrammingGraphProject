@@ -18,7 +18,7 @@ val flotmin: (int arc) list -> int
 
 val journey: ecart_graph -> id -> id -> (int arc) list
 
-val ford_fulkerson: cap_graph -> id -> id -> ecart_graph
+val ford_fulkerson: cap_graph -> id -> id -> flot_graph
 
 
 

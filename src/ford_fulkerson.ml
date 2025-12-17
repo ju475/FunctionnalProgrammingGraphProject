@@ -19,11 +19,15 @@ in
     e_fold fg add_both (clone_nodes fg) 
  
 
-(*
-let ecart2flot (cg:cap_graph)(eg : ecart_graph)=
 
+let ecart2flot (cg : cap_graph) (eg : ecart_graph) =
+  let add_arc newg ca =
+      match find_arc eg ca.src ca.tgt with
+        |Some ea -> new_arc newg { src = ca.src; tgt = ca.tgt; lbl = ((ca.lbl-ea.lbl), ca.lbl) }
+        |None -> newg
+  in
+  e_fold cg add_arc (clone_nodes cg)
 
-*)
 
 let mapi f i l =
     f (List.nth l i)
@@ -62,7 +66,7 @@ let flotmin (jrn:(int arc) list) =
 let ford_fulkerson (cg:cap_graph) (srcNode:id) (tgtNode:id)  =
 if not (node_exists cg srcNode) then raise (Graph_error "Source Node Not Exists")
     else if not (node_exists cg tgtNode) then raise (Graph_error "Target Node Not Exists")
-    else let fg0 = cap2flot cg in 
+    else let ff () = let fg0 = cap2flot cg in 
     let eg0 = flot2ecart fg0 in
     let rec loop eg =
         let chemin = journey eg srcNode tgtNode in
@@ -78,6 +82,7 @@ if not (node_exists cg srcNode) then raise (Graph_error "Source Node Not Exists"
         loop eg
 
     in loop eg0
+in ecart2flot cg (ff ())
 
 
 
