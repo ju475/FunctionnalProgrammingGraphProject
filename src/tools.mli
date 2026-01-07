@@ -4,4 +4,4 @@ val clone_nodes: 'a graph -> 'b graph
 val gmap: 'a graph -> ('a -> 'b) -> 'b graph
 val add_arc: int graph -> id -> id -> int -> int graph
 val string_of_tuple: ('a -> string) -> 'a * 'a -> string
-val chemin2graph: 'a arc list -> (id * 'a arc list) list
+val chemin2graph: id arc list -> id graph

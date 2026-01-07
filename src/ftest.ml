@@ -1,6 +1,6 @@
 open Gfile
 open Tools
-open Graph
+(*open Graph*)
 open Ford_fulkerson
     
 let () =
@@ -43,20 +43,20 @@ let () =
   let () = print_endline "C" in
   let graph = (gmap graph string_of_int) in *)
   (*let graph = (chemin2graph graph) in*)
-  let graph = (gmap graph string_of_int) in *)
+  let graph = (gmap graph string_of_int) in  *)
 
+  
   (* Open file *)
   let graph = from_file infile in
   let cgraph = (gmap graph int_of_string) in 
-  let graph = (cap2flot cgraph) in
-  let graph = (flot2ecart graph) in 
-  let graph = (ecart2flot cgraph graph) in 
+  let graph = (ford_fulkerson cgraph 1 2) in
   let graph = (gmap graph (string_of_tuple string_of_int)) in 
+
 
   (* let graph2 = (gmap graph (fun x->  
     string_of_int(int_of_string(x)+2))) in *)
   (* Rewrite the graph that has been read. *)
-  (*let () = export outfile graph in *)
+  let () = export _outfile graph in 
 
   ()
 
