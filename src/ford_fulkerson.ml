@@ -39,9 +39,9 @@ let rec dfs (eg:ecart_graph) (srcNode:id) (tgtNode:id) (visiting:int) (acc:(int 
         if (visiting>(List.length l_arc)-1) then [] (*Si on s'apprete a visité un arc qui n'existe pas*)
         else 
             let arc2visit = (List.nth l_arc visiting) in
-            if List.fold_left (fun ans arc -> match arc with 
-                | {src=s;tgt=_;lbl=_} -> ans || s==arc2visit.src || arc2visit.lbl==0) false acc then (dfs eg srcNode tgtNode (visiting+1) acc)
-            (*Si on observe un arc qui amème à un noeud deja visité OU le label = 0 *)            
+            if (arc2visit.lbl==0 || (List.fold_left (fun ans arc -> match arc with 
+                | {src=visitedNode;tgt=_;lbl=_} -> ans || visitedNode==arc2visit.src) false acc)) then (dfs eg srcNode tgtNode (visiting+1) acc)
+            (*Si on observe un arc qui amème à un noeud deja visité OU le label = 0 alors on visite le prochain noeud voisin*)            
             else
                 
                 if (l_arc == []) then [] (* Si on est à la fin du chemin, soit arrivé, soit backtrack *)
