@@ -46,9 +46,7 @@ let rec dfs (eg:ecart_graph) (srcNode:id) (tgtNode:id) (visiting:int) (acc:(int 
                 
                 if (l_arc == []) then [] (* Si on est à la fin du chemin, soit arrivé, soit backtrack *)
                 else
-                    let () = print_endline "D" in
-                    let currentChemin = (mapi (fun arc ->(dfs (eg) (arc.tgt) (tgtNode) 0 (arc::acc))) visiting l_arc) in (* Si on peut aller plus loin *)
-                    let () = print_endline "E" in    
+                    let currentChemin = (mapi (fun arc ->(dfs (eg) (arc.tgt) (tgtNode) 0 (arc::acc))) visiting l_arc) in (* Si on peut aller plus loin *)   
                     match currentChemin with
                         | [] -> dfs eg srcNode tgtNode (visiting+1) acc (* Si pas de chemin possible et pas d'autre arc dispo, backtrack, sinon on tente sur l'arc d'apres*)
                         | _ ->  currentChemin
@@ -69,11 +67,16 @@ if not (node_exists cg srcNode) then raise (Graph_error "Source Node Not Exists"
     else let ff () = let fg0 = cap2flot cg in 
     let eg0 = flot2ecart fg0 in
     let rec loop eg =
+        let () = Printf.printf "before journey \n %!" in
         let chemin = journey eg srcNode tgtNode in
+        let schemin = String.concat ";" (List.map (fun arc -> string_of_int arc.tgt) chemin) in
+        print_endline schemin ;
         if chemin = [] then eg
         else
+            (* on calcul la capacité maximal utilisable (donc le min sur le chemin) *)
         let delta = flotmin chemin in 
-
+            let () = Printf.printf "delta = %d \n %!" delta in 
+            (* on enleve delta (la valeur du flot) sur chaque arretes ou l'on passe et on l'ajoute aux arretes retour *)
          let deal a eg = 
             let eg_arcplus = add_arc eg a.src a.tgt delta in
             add_arc eg_arcplus a.tgt a.src (-delta)
