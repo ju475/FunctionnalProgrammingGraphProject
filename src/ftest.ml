@@ -21,7 +21,7 @@ let () =
   (* Arguments are : infile(1) source-id(2) sink-id(3) outfile(4) *)
   
   let infile = Sys.argv.(1)
-  and outfile = Sys.argv.(4)
+  and _outfile = Sys.argv.(4)
   
   (* These command-line arguments are not used for the moment. *)
   and _source = int_of_string Sys.argv.(2)
@@ -49,22 +49,16 @@ let () =
   (* Open file *)
   let graph = from_file infile in
   let cgraph = (gmap graph int_of_string) in 
-  let graph = (cap2flot cgraph) in
-  let graph = (flot2ecart graph) in 
-  (*let graph = (ecart2flot cgraph graph) in *)
-  let graph = (journey graph 1 2) in
-  let graph = (chemin2graph graph) in
-  let graph = (gmap graph (string_of_int)) in 
-  let graph = (ford_fulkerson cgraph 1 2) in
+  let graph = (ford_fulkerson cgraph _source _sink) in
   let graph = (gmap graph (string_of_tuple string_of_int)) in 
 
 
   (* let graph2 = (gmap graph (fun x->  
     string_of_int(int_of_string(x)+2))) in *)
   (* Rewrite the graph that has been read. *)
-  let () = export outfile graph in
+  let () = export _outfile graph in 
 
   ()
 
-
+ 
 

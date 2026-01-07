@@ -1,8 +1,8 @@
 .PHONY: all build format edit demo clean
 
 src?=0
-dst?=8
-graph?=graph.txt
+dst?=5
+graph?=graph1.txt
 
 all: build
 
@@ -35,10 +35,3 @@ demoDot: build
 	./ftest.exe graphs/${graph} $(src) $(dst) graphs/new.dot
 	dot -Tsvg graphs/new.dot > new.svg
 	
-testJustine: 
-	@echo "\n   🚨  COMPILING  🚨 \n"
-	dune build src/ftest2.exe
-	ls src/*.exe > /dev/null && ln -fs src/*.exe .
-	@echo "\n   ⚡  EXECUTING  ⚡\n"
-	./ftest2.exe graphs/${graph} $(src) $(dst) graphs/new.dot
-	dot -Tsvg graphs/new.dot > new.svg

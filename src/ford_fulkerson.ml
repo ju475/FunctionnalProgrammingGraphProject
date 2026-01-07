@@ -40,7 +40,7 @@ let rec dfs (eg:ecart_graph) (srcNode:id) (tgtNode:id) (visiting:int) (acc:(int 
         else 
             let arc2visit = (List.nth l_arc visiting) in
             if (arc2visit.lbl==0 || (List.fold_left (fun ans arc -> match arc with 
-                | {src=visitedNode;tgt=_;lbl=_} -> ans || visitedNode==arc2visit.src) false acc)) then (dfs eg srcNode tgtNode (visiting+1) acc)
+                | {src=visitedNode;tgt=_;lbl=_} -> ans || visitedNode==arc2visit.tgt) false acc)) then (dfs eg srcNode tgtNode (visiting+1) acc)
             (*Si on observe un arc qui amème à un noeud deja visité OU le label = 0 alors on visite le prochain noeud voisin*)            
             else
                 
@@ -59,34 +59,41 @@ let journey (eg:ecart_graph) (srcNode:id) (tgtNode:id) =
 
 
 let flotmin (jrn:(int arc) list) =
-    List.fold_left (fun acc new_val -> if (new_val.lbl < acc) then new_val.lbl else acc) (int_of_float infinity) jrn 
+    List.fold_left (fun acc new_val -> if (new_val.lbl < acc) then new_val.lbl else acc) 10000 jrn 
+
+
 
 let ford_fulkerson (cg:cap_graph) (srcNode:id) (tgtNode:id)  =
-if not (node_exists cg srcNode) then raise (Graph_error "Source Node Not Exists")
-    else if not (node_exists cg tgtNode) then raise (Graph_error "Target Node Not Exists")
-    else let ff () = let fg0 = cap2flot cg in 
-    let eg0 = flot2ecart fg0 in
-    let rec loop eg =
-        let () = Printf.printf "before journey \n %!" in
-        let chemin = journey eg srcNode tgtNode in
-        let schemin = String.concat ";" (List.map (fun arc -> string_of_int arc.tgt) chemin) in
-        print_endline schemin ;
-        if chemin = [] then eg
-        else
-            (* on calcul la capacité maximal utilisable (donc le min sur le chemin) *)
-        let delta = flotmin chemin in 
-            let () = Printf.printf "delta = %d \n %!" delta in 
-            (* on enleve delta (la valeur du flot) sur chaque arretes ou l'on passe et on l'ajoute aux arretes retour *)
-         let deal a eg = 
-            let eg_arcplus = add_arc eg a.src a.tgt delta in
-            add_arc eg_arcplus a.tgt a.src (-delta)
-        in 
-        let eg = List.fold_left (fun eg1 a -> deal a eg1) eg chemin in 
-        loop eg
+    if not (node_exists cg srcNode) 
+        then raise (Graph_error "Source Node Not Exists")
+    else 
+        if not (node_exists cg tgtNode) 
+            then raise (Graph_error "Target Node Not Exists")
+        else 
+            let ff () = 
+                let fg0 = cap2flot cg in 
+                let eg0 = flot2ecart fg0 in
+                let rec loop eg =
+                    let () = Printf.printf "before journey \n %!" in
+                    let chemin = List.rev(journey eg srcNode tgtNode) in
+                    let schemin = String.concat ";" (List.map (fun arc -> string_of_int arc.tgt) chemin) in
+                    print_endline schemin ;
+                    if chemin = [] 
+                        then eg
+                    else
+                            (* on calcul la capacité maximal utilisable (donc le min sur le chemin) *)
+                        let delta = (flotmin chemin) in 
+                        let () = Printf.printf "delta = %d \n %!" delta in
+                        if (delta = 0 ) 
+                            then eg 
+                        else
+                            (* on enleve delta (la valeur du flot) sur chaque arretes ou l'on passe et on l'ajoute aux arretes retour *)
+                        let update a eg =
+                                let eg_arcplus = add_arc eg a.src a.tgt (-delta) in
+                                add_arc eg_arcplus a.tgt a.src delta
+                        in 
+                    let eg2 = List.fold_left (fun eg1 a -> update a eg1 ) eg chemin in 
+                    loop eg2
 
-    in loop eg0
-in ecart2flot cg (ff ())
-
-
-
-
+                in loop eg0
+            in ecart2flot cg (ff ())
