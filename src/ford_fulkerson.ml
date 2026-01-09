@@ -59,11 +59,14 @@ let journey (eg:ecart_graph) (srcNode:id) (tgtNode:id) =
 
 
 let flotmin (jrn:(int arc) list) =
-    List.fold_left (fun acc new_val -> if (new_val.lbl < acc) then new_val.lbl else acc) 10000 jrn 
+    List.fold_left (fun acc new_val -> if (new_val.lbl < acc) then new_val.lbl else acc) 100000 jrn 
 
 
 
 let ford_fulkerson (cg:cap_graph) (srcNode:id) (tgtNode:id)  =
+    if (journey (flot2ecart (cap2flot cg)) srcNode tgtNode) = [] 
+        then raise (Graph_error "No path from Source to Target")
+    else
     if not (node_exists cg srcNode) 
         then raise (Graph_error "Source Node Not Exists")
     else 

@@ -37,14 +37,12 @@ demoFF: build1
 testFF: build2
 	@echo "\n   ⚡  EXECUTING TEST ON FF  ⚡\n"
 	./ftest.exe 
-	dot -Tsvg graphs/new.dot > new.svg
 
 demoGB: build1
 	@echo "\n   ⚡  EXECUTING DEMO ON GB  ⚡\n"
-	./fdemo.exe graphs/${graph} $(src) $(dst) graphs/new.dot
-	dot -Tsvg graphs/new.dot > new.svg
+	./fdemo.exe graphs-bipartite/ressources/${graph}b.txt $(src) $(dst) graphs-bipartite/new.dot
+	dot -Tsvg graphs-bipartite/new.dot > graphs/svg_output/${graph}b.svg
 
 testGB: build2
 	@echo "\n   ⚡  EXECUTING TEST ON GB  ⚡\n"
-	./ftest.exe graphs/${graph} $(src) $(dst) graphs/new.dot
-	dot -Tsvg graphs/new.dot > new.svg
+	./ftest.exe 

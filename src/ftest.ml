@@ -48,6 +48,16 @@ let total_flow_from_source g source =
   );
   !sum
 
+let check_path_exists cap_graph source sink =
+  let eg = flot2ecart (cap2flot cap_graph) in
+  let path = journey eg source sink in
+  if path = [] then
+    fail (Printf.sprintf
+      "No path from source %d to sink %d" source sink)
+  else
+    ok "Path from source to sink exists"
+
+
 (* ---------- Test sur un fichier ---------- *)
 
 let test_graph file source sink =
@@ -55,16 +65,30 @@ let test_graph file source sink =
 
   let g = from_file file in
   let cap_graph = gmap g int_of_string in
-  let flot_graph = ford_fulkerson cap_graph source sink in
 
-  check_arc_constraints flot_graph;
-  ok "Capacities respected";
+  (* Vérification du chemin *)
+  let eg = flot2ecart (cap2flot cap_graph) in
+  if journey eg source sink = [] then begin
+    Printf.printf "⚠ No path from %d to %d → test skipped\n" source sink;
+  end else begin
+    try
+      let flot_graph = ford_fulkerson cap_graph source sink in
 
-  flow_balance flot_graph source sink;
-  ok "Flow conservation OK";
+      check_arc_constraints flot_graph;
+      ok "Capacities respected";
 
-  let f = total_flow_from_source flot_graph source in
-  Printf.printf "➡ Max flow = %d\n" f
+      flow_balance flot_graph source sink;
+      ok "Flow conservation OK";
+
+      let f = total_flow_from_source flot_graph source in
+      Printf.printf "➡ Max flow = %d\n" f
+
+    with
+    | Graph_error msg ->
+        fail ("Ford-Fulkerson raised Graph_error: " ^ msg)
+  end
+
+  
 
 (* ---------- Main ---------- *)
 
@@ -77,7 +101,7 @@ let () =
   test_graph "graphs/ressources/graph4.txt" 0 5;
   test_graph "graphs/ressources/graph5.txt" 0 5;
   test_graph "graphs/ressources/graph6.txt" 0 5;
-  (*test_graph "graphs/ressources/graph7.txt" 0 9;*)
+  test_graph "graphs/ressources/graph7.txt" 0 9;
   test_graph "graphs/ressources/graph8.txt" 0 3;
   test_graph "graphs/ressources/graph9.txt" 0 3;
   test_graph "graphs/ressources/graph10.txt" 0 7;
