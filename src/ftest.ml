@@ -48,16 +48,6 @@ let total_flow_from_source g source =
   );
   !sum
 
-let check_path_exists cap_graph source sink =
-  let eg = flot2ecart (cap2flot cap_graph) in
-  let path = journey eg source sink in
-  if path = [] then
-    fail (Printf.sprintf
-      "No path from source %d to sink %d" source sink)
-  else
-    ok "Path from source to sink exists"
-
-
 (* ---------- Test sur un fichier ---------- *)
 
 let test_graph file source sink =
