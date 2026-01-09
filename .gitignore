@@ -8,4 +8,5 @@ token.txt
 new.svg
 graphs/graph.dot
 graphs/new.dot
+graphs/svg_output/*.svg
 src/ftest.ml

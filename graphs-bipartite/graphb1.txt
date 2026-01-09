@@ -1,0 +1,29 @@
+% Nodes
+
+%% Source
+
+so 200 300 0
+
+%% Sink 
+
+k 200 200 1
+
+%% Left Nodes
+
+l 200 400 2
+l 380 300 3
+
+%% Right Nodes
+
+r 380 200 4 
+r 380 200 5
+
+% Edges
+
+e 0 2 0 1     
+e 0 3 1 1
+e 2 4 2 1
+e 2 5 3 1
+e 3 5 4 1
+e 5 1 5 2
+e 4 1 6 1

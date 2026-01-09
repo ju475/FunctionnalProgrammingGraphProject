@@ -127,3 +127,42 @@ let export path graph =
   
   close_out ff ;
   ()
+
+
+(*let from_file_gb path =
+
+  let infile = open_in path in
+
+  (* Read all lines until end of file. *)
+  let rec loop graph =
+    try
+      let line = input_line infile in
+
+      (* Remove leading and trailing spaces. *)
+      let line = String.trim line in
+
+      let graph2 =
+        (* Ignore empty lines *)
+        if line = "" then graph
+
+        (* The first character of a line determines its content : n or e. *)
+        else match line.[0] with
+          | 's' -> read_node graph line
+          | 'k' -> read_node graph line
+          | 'l' -> read_node graph line
+          | 'r' -> read_node graph line
+          | 'e' -> read_arc graph line
+
+          (* It should be a comment, otherwise we complain. *)
+          | _ -> read_comment graph line
+      in      
+      loop graph2
+
+    with End_of_file -> graph (* Done *)
+  in
+
+  let final_graph = loop empty_graph in
+  
+  close_in infile ;
+  final_graph
+  *)

@@ -2,12 +2,17 @@
 
 src?=0
 dst?=5
-graph?=graph1.txt
+graph?=graph1
 
 all: build
 
-build:
-	@echo "\n   🚨  COMPILING  🚨 \n"
+build1:
+	@echo "\n   🚨  COMPILING DEMO  🚨 \n"
+	dune build src/fdemo.exe
+	ls src/*.exe > /dev/null && ln -fs src/*.exe .
+
+build2:
+	@echo "\n   🚨  COMPILING TEST  🚨 \n"
 	dune build src/ftest.exe
 	ls src/*.exe > /dev/null && ln -fs src/*.exe .
 
@@ -17,12 +22,6 @@ format:
 edit:
 	code . -n
 
-demo: build
-	@echo "\n   ⚡  EXECUTING  ⚡\n"
-	./ftest.exe graphs/${graph} $(src) $(dst) outfile
-	@echo "\n   🥁  RESULT (content of outfile)  🥁\n"
-	@cat outfile
-
 clean:
 	find -L . -name "*~" -delete
 	rm -f *.exe
@@ -30,8 +29,22 @@ clean:
 	rm graphs/new.dot
 	dune clean
 
-demoDot: build
-	@echo "\n   ⚡  EXECUTING  ⚡\n"
+demoFF: build1
+	@echo "\n   ⚡  EXECUTING DEMO ON FF  ⚡\n"
+	./fdemo.exe graphs/ressources/${graph}.txt $(src) $(dst) graphs/new.dot
+	dot -Tsvg graphs/new.dot > graphs/svg_output/${graph}.svg
+	
+testFF: build2
+	@echo "\n   ⚡  EXECUTING TEST ON FF  ⚡\n"
+	./ftest.exe graphs/ressources/${graph} $(src) $(dst) graphs/new.dot
+	dot -Tsvg graphs/new.dot > new.svg
+
+demoGB: build1
+	@echo "\n   ⚡  EXECUTING DEMO ON GB  ⚡\n"
+	./fdemo.exe graphs/${graph} $(src) $(dst) graphs/new.dot
+	dot -Tsvg graphs/new.dot > new.svg
+
+testGB: build2
+	@echo "\n   ⚡  EXECUTING TEST ON GB  ⚡\n"
 	./ftest.exe graphs/${graph} $(src) $(dst) graphs/new.dot
 	dot -Tsvg graphs/new.dot > new.svg
-	

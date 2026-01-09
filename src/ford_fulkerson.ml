@@ -74,16 +74,12 @@ let ford_fulkerson (cg:cap_graph) (srcNode:id) (tgtNode:id)  =
                 let fg0 = cap2flot cg in 
                 let eg0 = flot2ecart fg0 in
                 let rec loop eg =
-                    let () = Printf.printf "before journey \n %!" in
                     let chemin = List.rev(journey eg srcNode tgtNode) in
-                    let schemin = String.concat ";" (List.map (fun arc -> string_of_int arc.tgt) chemin) in
-                    print_endline schemin ;
                     if chemin = [] 
                         then eg
                     else
                             (* on calcul la capacité maximal utilisable (donc le min sur le chemin) *)
                         let delta = (flotmin chemin) in 
-                        let () = Printf.printf "delta = %d \n %!" delta in
                         if (delta = 0 ) 
                             then eg 
                         else
