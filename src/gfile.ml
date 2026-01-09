@@ -128,8 +128,39 @@ let export path graph =
   close_out ff ;
   ()
 
+(* Bipartite Graphs Section *)
 
-(*let from_file_gb path =
+let read_source_gb graph line =
+  try Scanf.sscanf line "s %d %d %d" (fun _ _ id -> new_node graph id)
+  with e ->
+    Printf.printf "Cannot read source node in line - %s:\n%s\n%!" (Printexc.to_string e) line ;
+    failwith "from_file_gb"
+
+let read_sink_gb graph line =
+  try Scanf.sscanf line "k %d %d %d" (fun _ _ id -> new_node graph id)
+  with e ->
+    Printf.printf "Cannot read arc in line - %s:\n%s\n%!" (Printexc.to_string e) line ;
+    failwith "from_file_gb"
+
+let read_left_node_gb graph line =
+  try Scanf.sscanf line "l %f %f %d" (fun _ _ id -> new_node graph id)
+  with e ->
+    Printf.printf "Cannot read left node in line - %s:\n%s\n%!" (Printexc.to_string e) line ;
+    failwith "from_file_gb"
+
+let read_right_node_gb graph line =
+  try Scanf.sscanf line "r %f %f %d" (fun _ _ id -> new_node graph id)
+  with e ->
+    Printf.printf "Cannot read right node in line - %s:\n%s\n%!" (Printexc.to_string e) line ;
+    failwith "from_file_gb"
+
+let read_comment_gb graph line =
+  try Scanf.sscanf line " %%" graph
+  with _ ->
+    Printf.printf "Unknown line:\n%s\n%!" line ;
+    failwith "from_file_gb"
+
+let from_file_gb path =
 
   let infile = open_in path in
 
@@ -147,14 +178,14 @@ let export path graph =
 
         (* The first character of a line determines its content : n or e. *)
         else match line.[0] with
-          | 's' -> read_node graph line
-          | 'k' -> read_node graph line
-          | 'l' -> read_node graph line
-          | 'r' -> read_node graph line
+          | 's' -> read_source_gb graph line
+          | 'k' -> read_sink_gb graph line
+          | 'l' -> read_left_node_gb graph line
+          | 'r' -> read_right_node_gb graph line
           | 'e' -> read_arc graph line
 
           (* It should be a comment, otherwise we complain. *)
-          | _ -> read_comment graph line
+          | _ -> read_comment_gb graph line
       in      
       loop graph2
 
@@ -165,4 +196,3 @@ let export path graph =
   
   close_in infile ;
   final_graph
-  *)

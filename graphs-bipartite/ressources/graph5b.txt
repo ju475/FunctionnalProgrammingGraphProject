@@ -1,0 +1,13 @@
+%% Graphe NON BIPARTI (Erreur : lien interne l2-l3)
+s 200 100 0
+k 200 500 1
+l 100 250 2
+l 300 250 3
+r 200 400 4
+e 0 2 0 1
+e 0 3 1 1
+%% Cette arête entre deux nœuds 'left' casse la bipartition :
+e 2 3 2 1
+e 2 4 3 1
+e 3 4 4 1
+e 4 1 5 1
