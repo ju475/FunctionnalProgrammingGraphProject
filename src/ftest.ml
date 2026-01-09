@@ -1,64 +1,85 @@
 open Gfile
+open Graph
 open Tools
-(*open Graph*)
 open Ford_fulkerson
-    
+
+(* ---------- Utils de test ---------- *)
+
+let fail msg =
+  Printf.printf "❌ %s\n%!" msg;
+  exit 1
+
+let ok msg =
+  Printf.printf "✔ %s\n%!" msg
+
+(* ---------- Vérifications ---------- *)
+
+let check_arc_constraints g =
+  e_iter g (fun arc ->
+    let (f, c) = arc.lbl in
+    if f < 0 || f > c then
+      fail (Printf.sprintf
+        "Invalid flow on arc %d -> %d : f=%d c=%d"
+        arc.src arc.tgt f c)
+  )
+
+let flow_balance g source sink =
+  let balance = Hashtbl.create 16 in
+
+  n_iter g (fun id -> Hashtbl.add balance id 0);
+
+  e_iter g (fun arc ->
+    let (f, _) = arc.lbl in
+    Hashtbl.replace balance arc.src (Hashtbl.find balance arc.src - f);
+    Hashtbl.replace balance arc.tgt (Hashtbl.find balance arc.tgt + f);
+  );
+
+  Hashtbl.iter (fun v b ->
+    if v <> source && v <> sink && b <> 0 then
+      fail (Printf.sprintf
+        "Flow conservation violated at node %d (balance=%d)" v b)
+  ) balance
+
+let total_flow_from_source g source =
+  let sum = ref 0 in
+  e_iter g (fun arc ->
+    if arc.src = source then
+      let (f, _) = arc.lbl in sum := !sum + f
+  );
+  !sum
+
+(* ---------- Test sur un fichier ---------- *)
+
+let test_graph file source sink =
+  Printf.printf "\n🔎 Testing graph: %s\n" file;
+
+  let g = from_file file in
+  let cap_graph = gmap g int_of_string in
+  let flot_graph = ford_fulkerson cap_graph source sink in
+
+  check_arc_constraints flot_graph;
+  ok "Capacities respected";
+
+  flow_balance flot_graph source sink;
+  ok "Flow conservation OK";
+
+  let f = total_flow_from_source flot_graph source in
+  Printf.printf "➡ Max flow = %d\n" f
+
+(* ---------- Main ---------- *)
+
 let () =
+  print_endline "===== Ford–Fulkerson automatic tests =====";
 
-  (* Check the number of command-line arguments *)
-  if Array.length Sys.argv <> 5 then
-    begin
-      Printf.printf
-        "\n ✻  Usage: %s infile source sink outfile\n\n%s%!" Sys.argv.(0)
-        ("    🟄  infile  : input file containing a graph\n" ^
-         "    🟄  source  : identifier of the source vertex (used by the ford-fulkerson algorithm)\n" ^
-         "    🟄  sink    : identifier of the sink vertex (ditto)\n" ^
-         "    🟄  outfile : output file in which the result should be written.\n\n") ;
-      exit 0
-    end ;
+  test_graph "graphs/ressources/graph1.txt" 0 5;
+  test_graph "graphs/ressources/graph2.txt" 0 12;
+  test_graph "graphs/ressources/graph3.txt" 0 1;
+  test_graph "graphs/ressources/graph4.txt" 0 5;
+  test_graph "graphs/ressources/graph5.txt" 0 5;
+  test_graph "graphs/ressources/graph6.txt" 0 5;
+  (*test_graph "graphs/ressources/graph7.txt" 0 9;*)
+  test_graph "graphs/ressources/graph8.txt" 0 3;
+  test_graph "graphs/ressources/graph9.txt" 0 3;
+  test_graph "graphs/ressources/graph10.txt" 0 7;
 
-
-  (* Arguments are : infile(1) source-id(2) sink-id(3) outfile(4) *)
-  
-  let infile = Sys.argv.(1)
-  and _outfile = Sys.argv.(4)
-  
-  (* These command-line arguments are not used for the moment. *)
-  and _source = int_of_string Sys.argv.(2)
-  and _sink = int_of_string Sys.argv.(3)
-  in
-
-  (*
-  (* Open file *)
-  let graph = from_file infile in
-  let graph = (gmap graph int_of_string) in 
-  let graph = (cap2flot graph) in
-  let graph = (flot2ecart graph) in
-  let () = print_endline "AA" in
-  let chemin = (journey graph 0 5) in
-  let () = print_endline "B" in 
-  let schemin = String.concat ";" (List.map (fun arc -> string_of_int arc.tgt) chemin) in
-  print_endline schemin ;
-  (*let graph = (chemin2graph chemin) in 
-  let () = print_endline "C" in
-  let graph = (gmap graph string_of_int) in *)
-  (*let graph = (chemin2graph graph) in*)
-  let graph = (gmap graph string_of_int) in  *)
-
-  
-  (* Open file *)
-  let graph = from_file infile in
-  let cgraph = (gmap graph int_of_string) in 
-  let graph = (ford_fulkerson cgraph _source _sink) in
-  let graph = (gmap graph (string_of_tuple string_of_int)) in 
-
-
-  (* let graph2 = (gmap graph (fun x->  
-    string_of_int(int_of_string(x)+2))) in *)
-  (* Rewrite the graph that has been read. *)
-  let () = export _outfile graph in 
-
-  ()
-
- 
-
+  print_endline "\n🎉 All tests passed successfully!"

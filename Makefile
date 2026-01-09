@@ -1,8 +1,8 @@
 .PHONY: all build format edit demo clean
 
 src?=0
-dst?=5
-graph?=graph1
+dst?=9
+graph?=graph7
 
 all: build
 
@@ -36,7 +36,7 @@ demoFF: build1
 	
 testFF: build2
 	@echo "\n   ⚡  EXECUTING TEST ON FF  ⚡\n"
-	./ftest.exe graphs/ressources/${graph} $(src) $(dst) graphs/new.dot
+	./ftest.exe 
 	dot -Tsvg graphs/new.dot > new.svg
 
 demoGB: build1
