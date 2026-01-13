@@ -52,7 +52,7 @@ let total_flow_from_source g source =
 (* ---------- Test sur un fichier ---------- *)
 
 let test_bgraph file source sink =
-  Printf.printf "\n Testing bipartite graph: %s\n" file;
+  Printf.printf "\nTesting bipartite graph: %s\n" file;
 
   let g = from_file_gb file in
   let cap_graph = gmap g int_of_string in
@@ -77,7 +77,7 @@ let test_bgraph file source sink =
       ok "Flow conservation OK";
 
       let f = total_flow_from_source flot_graph source in
-      Printf.printf " Max flow = %d\n" f
+      Printf.printf "Max flow = %d\n" f
 
     with
     | Graph_error msg ->

@@ -88,7 +88,7 @@ let has_seen gr u_id m_id =
 (* Génère le graphe des intérêts potentiels *)
 let build_potential_interests gr left_ids right_ids =
   (* On repart d'un graphe vide avec tous les nœuds nécessaires *)
-  let empty_gr = List.fold_left (fun g id -> new_node g id) empty_graph ([0 ; 1] @ left_ids @ right_ids) in 
+  let empty_gr = List.fold_left (fun g id -> new_node g id) empty_graph (left_ids @ right_ids) in 
 
   (* Pour chaque utilisateur, on cherche des recommandations *)
   List.fold_left (fun g_acc u1_id ->
