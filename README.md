@@ -1,22 +1,46 @@
-Base project for Ocaml project on Ford-Fulkerson. This project contains some simple configuration files to facilitate editing Ocaml in VSCode.
+# Ford Fulkerson & Targeted ads with bi-partite graph
 
-To use, you should install the *OCaml Platform* extension in VSCode.
-Then open VSCode in the root directory of this repository (command line: `code path/to/ocaml-maxflow-project`).
+##  Project Overview
 
-Features :
- - full compilation as VSCode build task (Ctrl+Shift+b)
- - highlights of compilation errors as you type
- - code completion
- - view of variable types
+This project implements the **Ford-Fulkerson** algorithm in OCaml to solve max-flow problems. The primary application is a **targeted advertisement system**: using a bipartite graph, the algorithm determines the optimal distribution of free movie coupons to users based on their viewing history and preferences.
 
 
-A [`Makefile`](Makefile) provides some useful commands:
 
- - `make build` to compile. This creates an `ftest.exe` executable
- - `make demo` to run the `ftest` program with some arguments
- - `make format` to indent the entire project
- - `make edit` to open the project in VSCode
- - `make clean` to remove build artifacts
+## Actual Features
 
-In case of trouble with the VSCode extension (e.g. the project does not build, there are strange mistakes), a common workaround is to (1) close vscode, (2) `make clean`, (3) `make build` and (4) reopen vscode (`make edit`).
+* **Core Algorithm**: Full implementation of Ford-Fulkerson using residual(ecart) graphs.
 
+* **Graph Logic**: Fully abstract graph data type with modular iterators (`n_fold`, `e_fold`).
+
+* **Bipartite Matching**: Tools to verify if a graph is bipartite and solve matching problems.
+
+* **Graph Visualization & Export**: Export tools to `.dot` format (compatible with Graphviz) to visualize the flow results.
+
+* **Log Processing**: A logging system to build a bipartite graph matching users with the best available movie coupons based on their log (containing rate and movie's name).
+
+## Requirements
+
+This project is built with **OCaml**. 
+
+It is recommended to use **VSCode** with the *OCaml Platform* extension.
+
+To build and run the project you will need **Dune** and **Make**.
+
+--- 
+
+## Compilation & Usage
+
+### Build
+* `make build1`: Compile **fdemo.exe** (main program).
+* `make build2`: Compile **ftest.exe** (test suite).
+* `make clean`: Remove build artifacts.
+
+### Execution (Demos)
+Run the algorithm with automatic SVG generation (stored in `svg_output/`):
+* **Standard Ford Fulkerson**: `make demoFF graph=graph1 src=0 dst=5`
+* **Bipartite Matching**: `make demoGB graph=graph1`
+* **Log System**: `make demoLog log=log1`
+
+### Validation
+Run automated checks for flow conservation and capacity constraints:
+* `make testFF` (Normal graphs) | `make testGB` (Bipartite graphs)

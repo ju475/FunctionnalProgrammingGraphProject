@@ -7,11 +7,11 @@ open Ford_fulkerson
 (* ---------- Utils de test ---------- *)
 
 let fail msg =
-  Printf.printf "❌ %s\n%!" msg;
+  Printf.printf "%s\n%!" msg;
   exit 1
 
 let ok msg =
-  Printf.printf "✔ %s\n%!" msg
+  Printf.printf "%s\n%!" msg
 
 (* ---------- Vérifications ---------- *)
 
@@ -52,20 +52,20 @@ let total_flow_from_source g source =
 (* ---------- Test sur un fichier ---------- *)
 
 let test_bgraph file source sink =
-  Printf.printf "\n🔎 Testing bipartite graph: %s\n" file;
+  Printf.printf "\n Testing bipartite graph: %s\n" file;
 
   let g = from_file_gb file in
   let cap_graph = gmap g int_of_string in
 
   if (not (is_bipartite cap_graph)) then begin
-    Printf.printf "⚠ Graph is not bipartite → test skipped";
+    Printf.printf "Graph is not bipartite → test skipped";
   end else begin
   ok "Bipartite property OK";
 
   (* Vérification du chemin *)
   let eg = flot2ecart (cap2flot cap_graph) in
   if journey eg source sink = [] then begin
-    Printf.printf "⚠ No path from %d to %d → test skipped\n" source sink;
+    Printf.printf "No path from %d to %d → test skipped\n" source sink;
   end else begin
     try
       let flot_graph = ford_fulkerson cap_graph source sink in
@@ -77,7 +77,7 @@ let test_bgraph file source sink =
       ok "Flow conservation OK";
 
       let f = total_flow_from_source flot_graph source in
-      Printf.printf "➡ Max flow = %d\n" f
+      Printf.printf " Max flow = %d\n" f
 
     with
     | Graph_error msg ->
@@ -86,7 +86,7 @@ let test_bgraph file source sink =
   end
 
 let test_graph file source sink =
-  Printf.printf "\n🔎 Testing graph: %s\n" file;
+  Printf.printf "\nTesting graph: %s\n" file;
 
   let g = from_file file in
   let cap_graph = gmap g int_of_string in
@@ -94,7 +94,7 @@ let test_graph file source sink =
   (* Vérification du chemin *)
   let eg = flot2ecart (cap2flot cap_graph) in
   if journey eg source sink = [] then begin
-    Printf.printf "⚠ No path from %d to %d → test skipped\n" source sink;
+    Printf.printf "No path from %d to %d → test skipped\n" source sink;
   end else begin
     try
       let flot_graph = ford_fulkerson cap_graph source sink in
@@ -106,7 +106,7 @@ let test_graph file source sink =
       ok "Flow conservation OK";
 
       let f = total_flow_from_source flot_graph source in
-      Printf.printf "➡ Max flow = %d\n" f
+      Printf.printf "Max flow = %d\n" f
 
     with
     | Graph_error msg ->
@@ -123,7 +123,7 @@ let () =
   if Array.length Sys.argv <> 2 then
     begin
       Printf.printf
-        "\n ✻  Usage: %s choice\n\n%s%!" Sys.argv.(0)
+        "\n ✻ Usage: %s choice\n\n%s%!" Sys.argv.(0)
         ("   🟄  choice : choose between performs FF on normal graphs or bipartite graphs.\n\n") ;
       exit 0
     end ;
@@ -146,7 +146,7 @@ let () =
       test_bgraph "graphs-bipartite/ressources/graph4b.txt" 0 1;
       test_bgraph "graphs-bipartite/ressources/graph5b.txt" 0 1;
 
-      print_endline "\n🎉 All tests on Bipartite Graphs passed successfully!"
+      print_endline "\n All tests on Bipartite Graphs passed successfully!"
     end
   else begin
   print_endline "===== Ford–Fulkerson automatic tests =====";
@@ -162,5 +162,5 @@ let () =
   test_graph "graphs/ressources/graph9.txt" 0 3;
   test_graph "graphs/ressources/graph10.txt" 0 7;
 
-  print_endline "\n🎉 All tests passed successfully!" 
+  print_endline "\n All tests passed successfully!" 
 end

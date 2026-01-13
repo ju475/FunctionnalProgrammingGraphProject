@@ -46,7 +46,8 @@ let process_line st line =
       let g = if node_exists g u_id then g else new_node g u_id in
       let g = if node_exists g m_id then g else new_node g m_id in
       
-      { st2 with 
+      { st2 with let flotmin (jrn:(int arc) list) =
+    List.fold_left (fun acc new_val -> if (new_val.lbl < acc) then new_val.lbl else acc) 100000 jrn 
         graph = new_arc g {src=u_id; tgt=m_id; lbl=rating};
         left_ids = new_lefts;
         right_ids = new_rights }

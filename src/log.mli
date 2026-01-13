@@ -13,4 +13,4 @@ val extract_data: string -> (string * string * int) option
 
 val process_line: state -> string -> state
 
-val build_coupon_graph: int graph -> int list -> int list-> int graph
+val build_coupon_graph: int graph -> int list -> int list-> int graph 
