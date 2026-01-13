@@ -53,5 +53,5 @@ testGB: build2
 demoLog: build1
 	@echo "\n   ⚡  EXECUTING DEMO ON LOG  ⚡\n"
 	./fdemo.exe review_log/ressources/${log}.txt $(src) $(dst) review_log/new.dot log
-	dot -Tsvg review_log/new.dot > review_log/svg_output/${graph}.svg
+	dot -Tsvg review_log/new.dot > review_log/svg_output/graph_${log}.svg
 	rm review_log/new.dot
