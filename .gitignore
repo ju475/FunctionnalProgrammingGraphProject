@@ -9,4 +9,7 @@ new.svg
 graphs/graph.dot
 graphs/new.dot
 graphs/svg_output/*.svg
+graphs-bipartite/svg_output/*.svg
+review_log/svg_output/*.svg
+
 src/ftest.ml

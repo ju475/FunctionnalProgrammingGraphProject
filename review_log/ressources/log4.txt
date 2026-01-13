@@ -1,0 +1,10 @@
+2026-01-13T10:00:00 | 1 | Alice | 10 | Matrix | 5
+2026-01-13T10:05:00 | 2 | Bob | 10 | Matrix | 4
+2026-01-13T10:10:00 | 1 | Alice | 11 | Inception | 5
+2026-01-13T10:15:00 | 3 | Charlie | 11 | Inception | 5
+2026-01-13T10:20:00 | 2 | Bob | 12 | Toy Story | 5
+2026-01-13T10:25:00 | 4 | David | 12 | Toy Story | 5
+2026-01-13T10:30:00 | 3 | Charlie | 13 | Pulp Fiction | 4
+2026-01-13T10:35:00 | 5 | Eve | 13 | Pulp Fiction | 5
+2026-01-13T10:40:00 | 1 | Alice | 14 | Memento | 4
+2026-01-13T10:45:00 | 4 | David | 14 | Memento | 5
