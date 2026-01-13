@@ -3,6 +3,7 @@
 src?=0
 dst?=3
 graph?=graph5
+log?=log1
 
 all: build
 
@@ -48,3 +49,9 @@ demoGB: build1
 testGB: build2
 	@echo "\n   ⚡  EXECUTING TEST ON GB  ⚡\n"
 	./ftest.exe bipartite
+
+demoLog: build1
+	@echo "\n   ⚡  EXECUTING DEMO ON LOG  ⚡\n"
+	./fdemo.exe review_log/ressources/${log}.txt $(src) $(dst) review_log/new.dot log
+	dot -Tsvg review_log/new.dot > review_log/svg_output/${graph}.svg
+	rm review_log/new.dot

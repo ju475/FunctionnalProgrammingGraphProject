@@ -1,4 +1,5 @@
 open Graph
+open Log
 open Printf
     
 type path = string
@@ -196,3 +197,40 @@ let from_file_gb path =
   
   close_in infile ;
   final_graph
+
+
+(* Log Section *)
+
+let initial_state = {
+  graph = empty_graph;
+  mapping = [];
+  next_id = 2;
+  left_ids = [];
+  right_ids = [];
+}
+
+
+let from_log path =
+  let infile = open_in path in
+
+  (* L'accumulateur est maintenant de type 'state' au lieu de 'graph' *)
+  let rec loop st =
+    try
+      let line = String.trim (input_line infile) in
+
+      let st2 =
+        if line = "" || line.[0] = '%' then 
+          st (* Ignore les lignes vides ou les commentaires commençant par % *)
+        else 
+          process_line st line (* La fonction de parsing de phrases vue précédemment *)
+      in      
+      loop st2
+
+    with End_of_file -> st (* On retourne l'état final *)
+  in
+
+  (* On commence avec l'état initial défini plus haut *)
+  let final_state = loop initial_state in
+  
+  close_in infile ;
+  final_state

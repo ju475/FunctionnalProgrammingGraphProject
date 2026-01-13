@@ -1,6 +1,7 @@
 open Gfile
 open Tools
 open Ford_fulkerson
+open Log
     
 let () =
 
@@ -13,7 +14,7 @@ let () =
          "    🟄  source  : identifier of the source vertex (used by the ford-fulkerson algorithm) [Ignored for bipartite graphs]\n" ^
          "    🟄  sink    : identifier of the sink vertex (ditto) [Ignored for bipartite graphs]\n" ^
          "    🟄  outfile : output file in which the result should be written.\n" ^
-         "    🟄  choice  : either 'normal' or 'bipartite'\n\n") ;
+         "    🟄  choice  : either 'normal' or 'bipartite' or 'log' \n\n") ;
       exit 0
     end ;
 
@@ -25,7 +26,19 @@ let () =
   and choice = Sys.argv.(5)
   in
 
-  if choice = "bipartite" then begin
+  if choice = "log" then begin
+    
+    (* Open file *)
+    let review_state = from_log infile in
+    (*let coupon_graph = build_coupon_graph review_state.graph review_state.left_ids review_state.right_ids in *)
+    (*let graph = (gmap graph int_of_string) in *)
+    (*let graph = (ford_fulkerson coupon_graph 0 1) in (* 0 and 1 are the source and sink nodes *)*)
+    let graph = (gmap review_state.graph (string_of_int)) in 
+
+    let () = export outfile graph in 
+    ()
+
+  end else if choice = "bipartite" then begin
     
     (* Open file *)
     let graph = from_file_gb infile in

@@ -2,6 +2,7 @@
  * Write a graph to a file. *)
 
 open Graph
+open Log
 
 type path = string
 
@@ -10,6 +11,9 @@ val from_file: path -> string graph
 
 (* Values are read as strings. *)
 val from_file_gb: path -> string graph
+
+(* Values are read as strings. *)
+val from_log: path -> state
 
 (* Similarly, we write only a string graph.
  * If necessary, use gmap (to be written by you) to prepare the input graph. *)
