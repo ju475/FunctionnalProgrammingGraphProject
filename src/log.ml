@@ -1,54 +1,37 @@
 open Graph
 
-(* On cherche : Un Nom (Majuscule + lettres) ... un autre Nom ... un Chiffre *)
-let re_log = Str.regexp "\\([A-Z][a-z]+\\).+\\([A-Z][a-z]+\\).+\\([0-5]\\)"
-
+(* Parse une ligne du type "TIMESTAMP | ID | NAME | ITEM_ID | ITEM_NAME | RATING" *)
 let extract_data line =
-  if Str.string_match re_log line 0 then
-    let user = Str.matched_group 1 line in
-    let movie = Str.matched_group 2 line in
-    let rating = int_of_string (Str.matched_group 3 line) in
-    Some (user, movie, rating)
-  else
-    None
+  let parts = List.map String.trim (String.split_on_char '|' line) in
+  match parts with
+  | [_ts; uid; _uname; iid; _iname; rat] ->
+      (int_of_string uid,
+        int_of_string iid, 
+        int_of_string rat )
+  | _ -> failwith "Format de ligne invalide"
 
 
 type state = {
   graph : int graph;
-  mapping : (string * int) list;
-  next_id : int;
   left_ids : int list;   (* IDs des Utilisateurs *)
   right_ids : int list;  (* IDs des Films *)
 }
 
-(* Fonction qui récupère ou crée un ID pour un nom donné *)
-let get_or_create_id name st =
-  match List.assoc_opt name st.mapping with
-  | Some id -> id, st
-  | None -> 
-      let new_id = st.next_id in
-      new_id, { st with mapping = (name, new_id) :: st.mapping; 
-                        next_id = st.next_id + 1 }
 
 let process_line st line =
   match extract_data line with
-  | None -> st
-  | Some (user_name, movie_name, rating) ->
-      let u_id, st1 = get_or_create_id user_name st in
-      let m_id, st2 = get_or_create_id movie_name st1 in
+  | (u_id, m_id, rating) ->
       
       (* Mise à jour des partitions (sans doublons) *)
-      let new_lefts = if List.mem u_id st2.left_ids then st2.left_ids else u_id :: st2.left_ids in
-      let new_rights = if List.mem m_id st2.right_ids then st2.right_ids else m_id :: st2.right_ids in
+      let new_lefts = if List.mem u_id st.left_ids then st.left_ids else u_id :: st.left_ids in
+      let new_rights = if List.mem m_id st.right_ids then st.right_ids else m_id :: st.right_ids in
       
       (* Création des nœuds et de l'arc *)
-      let g = st2.graph in
+      let g = st.graph in
       let g = if node_exists g u_id then g else new_node g u_id in
       let g = if node_exists g m_id then g else new_node g m_id in
       
-      { st2 with let flotmin (jrn:(int arc) list) =
-    List.fold_left (fun acc new_val -> if (new_val.lbl < acc) then new_val.lbl else acc) 100000 jrn 
-        graph = new_arc g {src=u_id; tgt=m_id; lbl=rating};
+      { graph = new_arc g {src=u_id; tgt=m_id; lbl=rating};
         left_ids = new_lefts;
         right_ids = new_rights }
 

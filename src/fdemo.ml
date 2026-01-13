@@ -30,10 +30,9 @@ let () =
     
     (* Open file *)
     let review_state = from_log infile in
-    (*let coupon_graph = build_coupon_graph review_state.graph review_state.left_ids review_state.right_ids in *)
-    (*let graph = (gmap graph int_of_string) in *)
-    (*let graph = (ford_fulkerson coupon_graph 0 1) in (* 0 and 1 are the source and sink nodes *)*)
-    let graph = (gmap review_state.graph (string_of_int)) in 
+    let coupon_graph = build_coupon_graph review_state.graph review_state.left_ids review_state.right_ids in 
+    let graph = (ford_fulkerson coupon_graph 0 1) in (* 0 and 1 are the source and sink nodes *)
+    let graph = (gmap graph (string_of_tuple string_of_int)) in 
 
     let () = export outfile graph in 
     ()

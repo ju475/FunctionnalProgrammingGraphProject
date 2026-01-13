@@ -1,7 +1,7 @@
-[2026-01-13 10:00] Alice a attribué la note de 5 étoiles au film Matrix.
-[2026-01-13 10:05] Bob a adoré Matrix et lui donne une évaluation de 4.
-[2026-01-13 10:12] Alice pense que Inception mérite 5 sur 5.
-[2026-01-13 11:01] Charlie a été déçu par Inception et laisse une note de 2.
-[2026-01-13 11:30] Bob donne la note maximale de 5 à Toy Story.
-[2026-01-13 12:05] David n'a pas aimé Matrix, il note seulement 1 étoile.
-[2026-01-13 12:10] Charlie a finalement apprécié Toy Story avec un 4.
+2026-01-13T10:00:01 | 2 | Alice | 10 | Matrix | 5
+2026-01-13T10:05:22 | 3 | Bob | 10 | Matrix | 4
+2026-01-13T10:12:45 | 2 | Alice | 11 | Inception | 5
+2026-01-13T11:01:10 | 4 | Charlie | 11 | Inception | 2
+2026-01-13T11:30:00 | 3 | Bob | 12 | Toy Story | 5
+2026-01-13T12:05:15 | 5 | David | 10 | Matrix | 1
+2026-01-13T12:10:00 | 4 | Charlie | 12 | Toy Story | 4

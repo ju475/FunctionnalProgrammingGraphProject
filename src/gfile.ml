@@ -203,8 +203,6 @@ let from_file_gb path =
 
 let initial_state = {
   graph = empty_graph;
-  mapping = [];
-  next_id = 2;
   left_ids = [];
   right_ids = [];
 }
@@ -216,8 +214,11 @@ let from_log path =
   (* L'accumulateur est maintenant de type 'state' au lieu de 'graph' *)
   let rec loop st =
     try
-      let line = String.trim (input_line infile) in
+      let line = input_line infile in
 
+      (* Remove leading and trailing spaces. *)
+      let line = String.trim line in
+      
       let st2 =
         if line = "" || line.[0] = '%' then 
           st (* Ignore les lignes vides ou les commentaires commençant par % *)
@@ -231,6 +232,5 @@ let from_log path =
 
   (* On commence avec l'état initial défini plus haut *)
   let final_state = loop initial_state in
-  
   close_in infile ;
   final_state
