@@ -12,7 +12,6 @@ val from_file: path -> string graph
 (* Values are read as strings. *)
 val from_file_gb: path -> string graph
 
-(* Values are read as strings. *)
 val from_log: path -> state
 
 (* Similarly, we write only a string graph.

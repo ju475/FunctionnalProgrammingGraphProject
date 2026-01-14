@@ -215,22 +215,20 @@ let from_log path =
   let rec loop st =
     try
       let line = input_line infile in
-
-      (* Remove leading and trailing spaces. *)
       let line = String.trim line in
       
       let st2 =
         if line = "" || line.[0] = '%' then 
           st (* Ignore les lignes vides ou les commentaires commençant par % *)
         else 
-          process_line st line (* La fonction de parsing de phrases vue précédemment *)
+          process_line st line 
       in      
       loop st2
 
     with End_of_file -> st (* On retourne l'état final *)
   in
 
-  (* On commence avec l'état initial défini plus haut *)
+  (* On commence avec l'état initial*)
   let final_state = loop initial_state in
   close_in infile ;
   final_state

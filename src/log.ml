@@ -38,23 +38,46 @@ let process_line st line =
 
 
 let build_coupon_graph review_graph left_ids right_ids =
-  (* 1. On commence par un graphe contenant la Source (0) et le Puits (1) *)
+  (* On commence par un graphe contenant la Source (0) et le Puits (1) *)
   let base_g = new_node (new_node empty_graph 0) 1 in
 
-  (* 2. On ajoute les arcs Source -> Utilisateurs (capacité 1) *)
+  (* On ajoute les arcs Source -> Utilisateurs (capacité 1) *)
   let g_with_users = List.fold_left (fun g id -> 
     new_arc (new_node g id) {src=0; tgt=id; lbl=1}
   ) base_g left_ids in
 
-  (* 3. On ajoute les arcs Films -> Puits (capacité 1) *)
+  (* On ajoute les arcs Films -> Puits (capacité 1) *)
   let g_with_items = List.fold_left (fun g id -> 
     new_arc (new_node g id) {src=id; tgt=1; lbl=1}
   ) g_with_users right_ids in
 
-  (* 4. On ajoute les intérêts (Utilisateur -> Film) uniquement si note >= 4 *)
+  (* On ajoute les intérêts (Utilisateur -> Film) uniquement si note >= 4 *)
   e_fold review_graph (fun g arc ->
     if arc.lbl >= 4 then new_arc g {arc with lbl=1} else g
   ) g_with_items
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+(* Construction du graphe des intêrets = trop compliqué -> non rendu *)
+
 
 let finalize_flow_network potential_gr left_ids right_ids =
   (* 1. On part du graphe d'intérêts *)
@@ -78,7 +101,6 @@ let finalize_flow_network potential_gr left_ids right_ids =
 
   final_g
 
-
 (* Vérifie si un utilisateur a déjà vu un film spécifique *)
 let has_seen gr u_id m_id =
   match find_arc gr u_id m_id with
@@ -93,10 +115,10 @@ let build_potential_interests gr left_ids right_ids =
   (* Pour chaque utilisateur, on cherche des recommandations *)
   List.fold_left (fun g_acc u1_id ->
     
-    (* 1. Films vus par u1 *)
+    (* Films vus par u1 *)
     let u1_films = out_arcs gr u1_id in
     
-    (* 2. Trouver les utilisateurs similaires (ceux qui ont vu les mêmes films) *)
+    (* Trouver les utilisateurs similaires (ceux qui ont vu les mêmes films) *)
     let recommendations_for_u1 = List.fold_left (fun recs arc_to_film ->
       let film_id = arc_to_film.tgt in
       
@@ -105,7 +127,7 @@ let build_potential_interests gr left_ids right_ids =
         u_other <> u1_id && has_seen gr u_other film_id
       ) left_ids in
       
-      (* 3. Pour chaque co-viewer, trouver ses films que u1 n'a pas vus *)
+      (* Pour chaque co-viewer, trouver ses films que u1 n'a pas vus *)
       List.fold_left (fun recs_acc u2_id ->
         let u2_films = out_arcs gr u2_id in
         List.fold_left (fun acc_final arc_u2 ->
@@ -118,7 +140,7 @@ let build_potential_interests gr left_ids right_ids =
       
     ) [] u1_films in
 
-    (* 4. Ajouter les arcs (u1 -> film_potentiel) au graphe final *)
+    (* Ajouter les arcs (u1 -> film_potentiel) au graphe final *)
     let unique_recs = List.sort_uniq compare recommendations_for_u1 in
     List.fold_left (fun g_final m_id ->
       new_arc g_final {src=u1_id; tgt=m_id; lbl=1}
