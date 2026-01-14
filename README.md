@@ -1,5 +1,10 @@
 # Ford Fulkerson & Targeted ads with bi-partite graph
 
+## Group Name
+
+* Beau Justine
+* Koutaine Melwan
+  
 ##  Project Overview
 
 This project implements the **Ford-Fulkerson** algorithm in OCaml to solve max-flow problems. The primary application is a **targeted advertisement system**: using a bipartite graph, the algorithm determines the optimal distribution of free movie coupons to users based on their viewing history and preferences.
