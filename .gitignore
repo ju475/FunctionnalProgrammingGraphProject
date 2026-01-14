@@ -2,6 +2,7 @@ _build/
 outfile
 *~
 *.exe
+.vscode
 
 token.txt
 .Rhistory
