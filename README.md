@@ -5,7 +5,6 @@
 This project implements the **Ford-Fulkerson** algorithm in OCaml to solve max-flow problems. The primary application is a **targeted advertisement system**: using a bipartite graph, the algorithm determines the optimal distribution of free movie coupons to users based on their viewing history and preferences.
 
 
-
 ## Actual Features
 
 * **Core Algorithm**: Full implementation of Ford-Fulkerson using residual(ecart) graphs.
@@ -37,10 +36,14 @@ To build and run the project you will need **Dune** and **Make**.
 
 ### Execution (Demos)
 Run the algorithm with automatic SVG generation (stored in `svg_output/`):
-* **Standard Ford Fulkerson**: `make demoFF graph=graph1 src=0 dst=5`
-* **Bipartite Matching**: `make demoGB graph=graph1`
-* **Log System**: `make demoLog log=log1`
+* **Standard Ford Fulkerson**: `make demoFF graph=<graph> src=<src> dst=<dst>` but you can also try it without any argument.
+* **Bipartite Matching**: `make demoGB graph=<graph> ` but you can also try it without any argument.
+* **Log System**: `make demoLog log=<log>`
 
 ### Validation
 Run automated checks for flow conservation and capacity constraints:
 * `make testFF` (Normal graphs) | `make testGB` (Bipartite graphs)
+
+## Note
+The interest graph part is not intended for submission, we tried to go further but we've encountered difficulties developping 
+the functions (actuals ones are made by LLM). 
